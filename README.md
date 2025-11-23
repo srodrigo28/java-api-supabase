@@ -1,102 +1,51 @@
-### Criando API com Java + Supabase
+# 🚀 API REST com Java Spring Boot & Supabase
 
-#### Passo a passo
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
-> ##### 1 Baixando dependências.
-> * Spring Initialize
-    > * web 
-    > * devtools
-    > * jpa
-    > * lombook
-    > * postgres
-    > * thymeleaf
+> Um guia prático para criar uma API RESTful utilizando Java Spring Boot integrado ao banco de dados PostgreSQL hospedado no Supabase.
 
-> ##### 2 Configurando a conexão
-> * Conexão no arquivo application.properties
+---
 
-```
+## 🛠️ Tecnologias Utilizadas
+
+* **Java 17+**
+* **Spring Boot 3.x** (Web, JPA, DevTools, Thymeleaf)
+* **Lombok** (Produtividade)
+* **Supabase** (PostgreSQL na nuvem)
+
+---
+
+## 📝 Passo a Passo
+
+### 1. Configuração Inicial (Spring Initializr)
+
+Ao gerar o projeto no [Spring Initializr](https://start.spring.io/), selecione as seguintes dependências:
+
+* ✅ Spring Web
+* ✅ Spring Boot DevTools
+* ✅ Spring Data JPA
+* ✅ Lombok
+* ✅ PostgreSQL Driver
+* ✅ Thymeleaf
+
+### 2. Configurando a Conexão (`application.properties`)
+
+Configure o acesso ao banco de dados do Supabase.
+
+> **⚠️ Importante:** Nunca compartilhe suas senhas reais em repositórios públicos. Use variáveis de ambiente em produção.
+
+```properties
 spring.application.name=treina-dev
-spring.datasource.url=jdbc:postgresql://aws-0-sa-east-1.pooler.supabase.com:6543/postgres
 
-spring.datasource.username=postgres.ghzwevfciietjsuupili
-spring.datasource.password=nKfrnvLlQfKhtTYk
+# Conexão Supabase (PostgreSQL)
+spring.datasource.url=jdbc:postgresql://[aws-0-sa-east-1.pooler.supabase.com:6543/postgres](https://aws-0-sa-east-1.pooler.supabase.com:6543/postgres)
+spring.datasource.username=SEU_USUARIO_AQUI
+spring.datasource.password=SUA_SENHA_AQUI
 
+# Configurações JPA / Hibernate
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-```
-
-> ##### 3 Criando nosso Model
-> * Criar pasta Model/Categoria.java
-```
-package com.treina.dev.treina_dev.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Data;
-
-@Data
-@Entity(name="categoria")
-public class Categoria {
-    
-    @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String nome;
-
-    private String descricao;
-}
-```
-
-> ##### 4 Testando a conexão.
-> * Visualizando a tabela no supabase.
-
-> ##### 5 Crindo nosso Repository
-> *  Criar pasta Repository/CategoriaRepository.java
-```
-package com.treina.dev.treina_dev.repository;
-
-import org.springframework.data.repository.CrudRepository;
-import com.treina.dev.treina_dev.model.Categoria;
-
-public interface CategoriaRepository extends CrudRepository<Categoria, Long> {}
-
-```
-
-> ##### 6 Crindo nosso Controller / cadastrar
-```
-package com.treina.dev.treina_dev.controllers;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.treina.dev.treina_dev.model.Categoria;
-import com.treina.dev.treina_dev.repository.CategoriaRepository;
-
-@RestController
-@RequestMapping("/api/categoria")
-public class CategoriaController {
-    
-    @Autowired
-    private CategoriaRepository categoriaRepository;
-
-    // Cadastro categoria
-    @PostMapping("/cadastrar")
-    public Categoria cadastrar(@RequestBody Categoria obj){
-        return categoriaRepository.save(obj);
-    }   
-}
-```
-
-> ##### 7 Usando Insominia para testar
-
-> * Rota criada
-```
-http://localhost:8080/api/categoria/cadastrar
-```
